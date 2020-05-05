@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+
+.dimentional-text {
+  @apply text-gray-200 font-bold;
+  text-shadow: -2px -2px 2px #fff, 2px 2px 2px #cbd5e0;
+}
+
+input {
+  &:focus {
+    @apply outline-none;
+  }
+}
+
+.btn {
+  @apply shadow-inner2 rounded-lg mt-6;
+  &:hover {
+    @apply shadow-outline2;
+    & i {
+      transform: scale(0.98);
+    }
+  }
+  &.color {
+    @apply text-white py-1;
+    background: linear-gradient(to bottom right, red, #ffabcb, #bca4e9);
+    box-shadow: -4px -4px 4px #fff, 4px 4px 4px rgba(0, 0, 0, 0.15), inset 4px 4px 4px rgba(0, 0, 0, 0.01);
+
+    &:hover {
+      box-shadow: inset 7px 8px 6px rgba(0, 0, 0, 0.15), inset -3px -3px 7px #fff, 7px 8px 11px rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+.card {
+  box-shadow: -4px -4px 4px #fff, 12px 13px 12px rgba(0, 0, 0, 0.12), inset 16px 16px 26px rgba(0, 0, 0, 0.02);
+}
+
+.box {
+  @apply shadow-inner2 rounded-xl;
+}
+
+.profile {
+  @apply rounded-full py-1 px-2 shadow-inner2;
+}
+
+.fa-expand {
+  @apply bg-gray-200;
+  background: -webkit-linear-gradient(red, #ffabcb, #bca4e9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+input {
+  @apply mt-4 rounded-md py-2 px-6 bg-gray-200 shadow-outline2;
+  caret-color: red;
+}
+
+::placeholder {
+  @apply pl-3;
+}
+
+@tailwind utilities;

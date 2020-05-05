@@ -1,0 +1,19 @@
+{% extends 'base.html' %} {% load static %} {% block page_title %} Login {% endblock page_title %} {% block content %}
+<div class="box flex flex-col justify-center items-center max-w-sm px-16 py-16">
+  <span class="profile"><i class="fas fa-expand text-3xl"></i></span>
+  <span class="text-sm py-3">Highlight</span>
+  <form action="" method="POST" class="flex flex-col">
+    {% csrf_token %} {{form.username}} {{form.password1}}
+    <button name="Login" class="btn color"><span>Login</span></button>
+  </form>
+
+  {% for message in messages %}
+  <p>{{message}}</p>
+  {% endfor %}
+
+  <span class="mt-5 text-xs text-center"
+    >Don't have an account?<br />
+    Click <a class="text-red-600" href="{% url 'accounts:register' %}">here</a> to register</span
+  >
+</div>
+{% endblock content %}

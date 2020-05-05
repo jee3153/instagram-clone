@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    username
+{% endblock page_title %}
+
+
+{% block content %}
+    <h1>user_profile</h1>
+    user: {{photos.first.author}}
+    posts: {{photos.count}}
+    followings: {{photos.first.author.followings.count}}
+    followers: {{photos.first.author.followers.count}}
+
+{% for photo in photos  %}
+    <div style="width: 100px; height: 100px; background-image: url({{photo.image.url}});"></div>
+{% endfor %}
+    
+        
+        
+{% endblock content %}
+    

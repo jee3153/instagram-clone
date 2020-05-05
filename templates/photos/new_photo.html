@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    New Post
+{% endblock page_title %}
+    
+
+{% block content %}
+    <form method="POST" enctype="multipart/form-data" id="new-post">{% csrf_token %}
+    {{form.as_p}}
+    
+    <button id="new-post">Post</button>
+    </form>
+   
+{% endblock content %}
+   

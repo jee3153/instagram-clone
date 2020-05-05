@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <title>
+      {% block page_title %}{% endblock page_title %}
+    </title>
+  </head>
+  <body class="bg-gray-200 text-gray-700">
+    {% include 'partials/header.html' %}
+    <section class="flex flex-col items-center pt-2 justify-center">
+      {% block content %}{% endblock content %}
+    </section>
+    {% include 'partials/nav.html' %}
+    <script>
+      const usernameInput = document.getElementById('id_username');
+      const emailInput = document.getElementById('id_email');
+      const password1Input = document.getElementById('id_password1');
+      const password2Input = document.getElementById('id_password2');
+
+      const loginOrRegister = (inputArr) => {
+        const path = window.location.pathname;
+        if (path.includes('login')) {
+          inputArr = [usernameInput, password1Input];
+        } else if (path.includes('register')) {
+          inputArr = [usernameInput, password1Input, password2Input, emailInput];
+        } else {
+          return;
+        }
+        for (let input of inputArr) {
+          if (input == password1Input) {
+            input.placeholder = 'password';
+          } else if (input == password2Input) {
+            input.placeholder = 'confirm password';
+          } else {
+            input.placeholder = input.name;
+          }
+        }
+      };
+
+      const content = document.querySelector('section');
+      window.addEventListener('load', (event) => {
+        if (content.offsetHeight >= window.innerHeight) {
+          content.classList.remove('h-screen');
+        } else if (content.offsetHeight < window.innerHeight) {
+          content.classList.add('h-screen');
+        }
+      });
+
+      loginOrRegister();
+    </script>
+  </body>
+</html>

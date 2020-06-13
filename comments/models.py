@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import reverse
 from core import models as core_models
 
 
@@ -13,7 +14,13 @@ class Comment(core_models.TimeStampedModel):
     mention = models.ManyToManyField(
         "accounts.User", related_name="mention", blank=True
     )
-    is_liked = models.BooleanField(default=False)
+    like = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.comment
+
+    def get_absolute_url(self):
+        return reverse("comments:list", kwargs={"photo_pk": self.photo_id})
+
+    class Meta:
+        ordering = ["-created"]

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block page_title %}
+Like List
+{% endblock page_title %}
+
+{% block content %}
+<h1 class="text-gray-500 text-lg mb-6">Likes</h1>
+
+<section class="w-full">
+    {% for liker in likers  %}
+    {% if user.pk is not liker.pk %}
+        <article class="list-item grid justify-center mb-4 w-full px-10">
+        <a href="{% url 'accounts:user' liker.pk %}">
+
+        {% include 'mixins/profile_avatar.html' with user=liker %}
+
+        </a>
+        <span class="following__name px-3 font-medium">{{liker}}</span>
+        <span class="following__bio text-sm text-gray-500 text-center">{{liker.bio|truncatewords:10}}</span>
+        {% include 'mixins/following_btn.html' with followed=user.follower.followed.all author=liker user=user %}
+    </article>
+    {% endif %}
+     
+
+    {% endfor %}
+</section>
+
+
+{% endblock content %}

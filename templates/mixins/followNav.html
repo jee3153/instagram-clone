@@ -1,0 +1,7 @@
+<a href="{% url 'accounts:user' user %}" class="btn self-start ml-10 px-3 py-1 font-medium text-gray-600"><i class="fas fa-caret-left"></i></a>
+<nav class="follow__nav flex justify-around w-full mb-10">
+    <a href="{% url 'follow:followings' user %}"><div class="btn__follow btn {% if 'followings' in request.path %}text-gray-400 shadow-outline2 hover:text-teal-400{% else %}text-teal-400 hover:text-gray-400{% endif %}">Followings</div>
+    </a>
+    <a href="{% url 'follow:followed' user %}"><div class="btn__follow btn {% if 'followed' in request.path %}text-gray-400 shadow-outline2 hover:text-red-400{% else %}text-red-400 hover:text-gray-400{% endif %}">Followed</div>
+    </a>
+</nav>

@@ -1,0 +1,25 @@
+<div class="inline-block rounded-md w-6 h-6">
+        {% if data.has_previous %}
+        <a href="?username={{keyword}}&page={{data.previous_page_number}}" class="text-purple-400 btn"><</a>
+        {% else %}
+        <span class="text-gray-400 shadow-inner2 px-2 py-1 rounded-md"><</span>
+        {% endif %}
+    </div>
+    
+
+    {% for page in data.paginator.page_range  %}
+        {% if page == data.number %}
+        <span class="inline-block color-solid text-gray-100 bg-purple-400 rounded-md w-6 h-6 text-center shadow-outline3">{{page}}</span>
+        {% else %}
+         <a href="?search_by={{keyword}}&page={{page}}" class="inline-block btn color-solid text-gray-100 bg-purple-400 rounded-md w-6 h-6 text-center">{{page}}</a>
+        {% endif %}
+       
+    {% endfor %}
+
+    <div class="inline-block rounded-md w-6 h-6">
+        {% if data.has_next %}
+            <a href="?search_by={{keyword}}&page={{data.next_page_number}}" class="text-purple-400 btn">></a>
+        {% else %}
+            <span class="text-gray-400 shadow-inner2 px-2 py-1 rounded-md">></span>
+        {% endif %}
+    </div>

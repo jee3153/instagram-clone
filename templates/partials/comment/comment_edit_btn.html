@@ -1,0 +1,3 @@
+{% if request.user == comment.commenter %}
+    <a href="{% url 'comments:edit' photo_pk=photo.pk comment_pk=comment.pk %}"><i class="far fa-edit"></i></a>
+{% endif %}

@@ -8,7 +8,6 @@
         <span class="text-sm py-3">Highlight</span>
         <form action="" method="POST" class="flex flex-col">
             {% csrf_token %}
-
             {{form.username}}
             {{form.email}}
             {{form.password1}}
@@ -16,10 +15,9 @@
             <button name="Register" class="btn color">Register</button>
         </form>
         {% for message in messages %}
-            <p>{{message}}</p>
-        {% endfor %} 
+            <p {% if message.tags %} class="{{message.tag}}" {% end if %}>{{message}}</p>
+        {% endfor %}
         <span class="mt-5 text-xs text-center">Already have an account?<br/> Click <a class="text-red-600" href="{% url 'accounts:login' %}">here</a> to login</span>
     </div>
 
 {% endblock content %}
-    

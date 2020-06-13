@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block page_title %}
+Comment List
+{% endblock page_title %}
+
+{% block content %}
+
+{% for comment in comments  %}
+        {% include 'mixins/comment.html' with comment=comment photo=comment.photo profile_shown=True%}
+
+{% endfor %}
+{% endblock content %}

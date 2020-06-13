@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block page_title %}
+    Post Search View
+{% endblock page_title %}
+{% block content %}
+<div class="w-full h-full text-center">
+
+    {% include 'mixins/search_nav.html' %}
+
+
+    <form action="{% url 'photos:search' %}" method="GET" class="p-4 mb-10 text-center m-4">
+        {% for field in form %}
+            {{field}}
+        {% endfor %}
+        <button class='btn color-solid px-4 py-2 bg-purple-400 ml-2 text-gray-100'>Search</button>
+    </form>
+
+
+        <h1 class="text-center text-gray-500 text-lg px-4 py-6 shadow-inner2">Results of <span class="bg-gray-400 rounded-md py-1 px-2 text-sm shadow-inner2">#{{keyword}}</span></h1>
+
+        <section class="search-result w-full h-full grid justify-center items-center">
+        {% for post in posts.object_list  %}
+
+            <a href="{% url 'photos:detail' post.pk %}" class="inline-block h-full w-full flex jutify-center items-center">
+                <div style="background-image:url({{post.image.url}})"  class="search-item" alt="" ></div>
+            </a>
+        {% endfor %}
+    </section>
+     <div class="pagination">
+        {% include 'mixins/pagination.html' with data=posts search_by='content' %}
+     </div>
+</div>
+
+{% endblock content %}

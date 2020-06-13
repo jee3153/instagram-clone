@@ -1,0 +1,26 @@
+{% load humanize %}
+{% if comment %}
+    <div class="comment-container grid w-full items-center">
+    {% if profile_shown == True %}
+            {% include 'mixins/profile_avatar.html' with user=comment.commenter  %}
+    {% endif %}
+        <a class="{% if 'comments' not in request.path %}commenter-wrapper{% endif %}" href="{% url 'accounts:user' comment.commenter.pk %}">
+        <span class="commenter font-medium">{{comment.commenter}}</span>
+        </a>
+        <span class="comment mr-6 font-light truncate cursor-pointer">{{comment}}</span>
+        {% if photo %}
+            {% include 'partials/comment/comment_edit_btn.html' with photo=photo comment=comment %}
+            {% include 'partials/comment/comment_delete_btn.html' with photo=photo comment=comment %}
+        {% endif %}
+        <span class="likes text-gray-500 font-light text-sm">
+            {% if comment.like > 0 %}
+            {{comment.like}}like{% if comment.like > 1 %}{{comment.like|pluralize}}{% endif %}
+            {% endif %}
+        </span>
+        {% if comment.updated %}
+            <span class="comment__date">{{comment.updated|naturaltime}}</span>
+        {% else %}
+             <span class="comment__date">{{comment.created|naturaltime}}</span>
+        {% endif %}
+    </div>
+{% endif %}

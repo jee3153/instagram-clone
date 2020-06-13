@@ -1,0 +1,42 @@
+{% load humanize like_numbers %}
+{% if post %}
+    <div class="flex justify-between items-center">
+        <a class="ml-4 font-medium flex items-center" href="{% url 'accounts:user' post.author.pk %}">{% include 'mixins/profile_avatar.html' with user=post.author %}<span class="author ml-2">{{post.author}}</span></a>
+
+    {% if post.author.pk is user.pk %}
+    <div class="flex flex-col text-sm px-2">
+            <a href="{% url 'photos:delete' author_pk=post.author.pk photo_pk=post.pk %}" class="text-red-400">Delete</a>
+            <a href="{% url 'photos:edit' author_pk=post.author.pk photo_pk=post.pk %}" >Edit</a>
+        </div>
+        {% endif %}
+
+    </div>
+    <a href="{% url 'photos:detail' post.pk %}">
+        <div class="upload" style="background-image: url({{post.image.url}});"></div>
+    </a>
+    <div class="mb-2 px-2">{{post.content}}</div>
+
+    {% if post.post.likers %}
+        <a href="{% url 'photos:likelist' post.pk %}" class="text-sm block p-2">{% like_numbers post.post.likers.all user.follower.followings.all %}</a>
+    {% endif %}
+
+    <section class="px-2">
+     {% if user in post.post.likers.all %}
+            <a href="{% url 'photos:unlike' photo_pk=post.pk user_pk=user.pk %}" class="my-2 text-red-500"><i class="fas fa-heart"></i></a>
+        {% else %}
+            <a href="{% url 'photos:like' photo_pk=post.pk user_pk=user.pk %}" class="my-2"><i class="far fa-heart"></i></a>
+        {% endif %}
+        <a href="{% url 'comments:create' post.pk %}" class="my-2"><i class="far fa-comment"></i><span class="text-sm"> Add a comment</span></a>
+
+        {% for comment in post.comment.all|slice:':1' %}
+            {% include 'mixins/comment.html' with comment=comment photo=post profile_shown=False%}
+        {% endfor %}
+
+        {% if post.comment.all.count > 0 %}
+            <a href="{% url 'comments:list' post.pk %}" class="comment-link"><i class="far fa-eye"></i><span class="text-sm"> all {{post.comment.all.count}} comment{{post.comment.all.count|pluralize}}</span></a>
+        {% endif %}
+
+        <p class="text-gray-500 font-light text-xs">{{post.created|naturaltime}}</p>
+
+    </section>
+{% endif %}

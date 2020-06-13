@@ -3,14 +3,23 @@
 {% block page_title %}
     New Post
 {% endblock page_title %}
-    
+
 
 {% block content %}
-    <form method="POST" enctype="multipart/form-data" id="new-post">{% csrf_token %}
-    {{form.as_p}}
-    
-    <button id="new-post">Post</button>
+<section class="flex flex-col items-center">
+    <h1 class="text-gray-500 text-lg">Posting a new photo</h1>
+    <form method="POST" enctype="multipart/form-data" name="image" class="w-1/3 relative flex flex-col">
+        {% csrf_token %}
+        <label for="id_image" class="image-placeholder">Click to upload a photo</label>
+        {% for field in form %}
+            {{field}}
+            {% if error in field.errors %}
+                <span>{{error}}</span>
+            {% endif %}
+        {% endfor %}
+        <button class='btn color mt-6'>Post</button>
     </form>
-   
+
+</section>
+
 {% endblock content %}
-   

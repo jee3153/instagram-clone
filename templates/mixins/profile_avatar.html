@@ -1,0 +1,10 @@
+{% if user.profile %}
+    <div
+      style="background-image: url({{user.profile.url}});"
+      class="profile rounded-full" id="profile_display"
+    ></div>
+  {% else %}
+    <div class="flex justify-center items-center profile">
+      <i class="text-gray-400 fas fa-user"></i>
+    </div>
+  {% endif %}

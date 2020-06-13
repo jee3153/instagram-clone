@@ -1,10 +1,25 @@
 {% extends 'base.html' %}
 
 {% block page_title %}
-    Edit Info
+    Edit Post
 {% endblock page_title %}
 
+
 {% block content %}
-    
+<section class="flex flex-col items-center">
+    <h1 class="text-gray-500 text-lg">Editing a photo</h1>
+    <div class="upload my-4 mx-auto bg-gray-100 w-1/3" style="background-image: url({{object.image.url}});"></div>
+
+
+    <div class="display"></div>
+    <form method="POST" enctype="multipart/form-data" name="image" class="relative w-1/3 flex flex-col">
+    {% csrf_token %}
+    <label for="id_image" class="image-placeholder">Click to upload a photo</label>
+    {{form.image}}
+    {{form.content}}
+
+    <button class='btn color mt-6'>Edit</button>
+    </form>
+</section>
+
 {% endblock content %}
-    

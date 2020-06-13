@@ -1,0 +1,9 @@
+{% if user.pk != author.pk %}
+  
+        {% if author in followings %}
+            <a href="{% url 'follow:unfollowuser' author_pk=author.pk user_pk=user.pk %}" class="btn__followornot btn py-2 px-10 text-center block"><span class="gradient-text">Unfollow</span></a>
+        {% else %}
+            <a href="{% url 'follow:followuser' author_pk=author.pk user_pk=user.pk  %}" class="btn__followornot btn py-2 px-10 bg-purple-400 text-gray-200 color text-center block">Follow</a>
+        {% endif %}
+
+{% endif %}

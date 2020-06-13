@@ -1,10 +1,27 @@
 {% extends 'base.html' %}
-
 {% block page_title %}
-    Setting
-{% endblock page_title %}
-    
-    {% block content %}
-        
-    {% endblock content %}
-        
+  Setting
+{% endblock page_title%}
+{% block content %}
+    <div class="flex flex-col items-center box p-16">
+
+            <p class="message hidden p-4 mb-8 text-white bg-green-300 rounded-lg shadow-inner2">Profile uploaded successfully</p>
+            <p class="message-fail hidden p-4 mb-8 text-white bg-red-300 rounded-lg shadow-inner2"></p>
+
+        {% include 'mixins/profile_avatar.html' with user=request.user %}
+
+        <form class="flex flex-col" method="POST" enctype="multipart/form-data" name="profile">
+            {% csrf_token %}
+            {{form.username}}
+            {{form.email}}
+            {{form.password1}}
+            {{form.password2}}
+            {{form.bio}}
+            <div class="box__imgInput">
+            {{form.profile}}
+            <label class="box__label" for="file">Choose a file or drag it here.</label>
+            </div>
+            <button class="btn color active:outline-none" id="save">Save</button>
+        </form>
+    </div>
+{% endblock content %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block page_title %}
+Create Comment
+{% endblock page_title %}
+
+{% block content %}
+<section class="flex flex-col w-full">
+   
+    {% for comment in comments %}
+        {% include 'mixins/comment.html' with comment=comment photo=comment.photo profile_shown=True%}
+    {% endfor %}
+   
+
+    {% include 'mixins/commentForm.html' with ctx="POST" text_color="red" %}
+   
+
+</section>
+
+
+{% endblock content %}

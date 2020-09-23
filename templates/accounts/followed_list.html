@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block page_title %}
+Followed List
+{% endblock page_title %}
+
+{% block content %}
+{% include 'mixins/followNav.html' with user=view.kwargs.user %}
+
+    <section class="w-full">
+        {% for follow in followed  %}
+
+            <article class="list-item grid justify-center items-center mb-4 w-full px-10">
+            <a href="{% url 'accounts:user' follow.pk %}">
+
+            {% include 'mixins/profile_avatar.html' with user=follow %}
+
+            </a>
+            <span class="following__name px-3 font-medium">{{follow}}</span>
+            <span class="following__bio text-sm text-gray-500 text-center">{{follow.bio|truncatewords:10}}</span>
+            {% include 'mixins/following_btn.html' with followings=user.follower.followed.all author=follow user=user %}
+            </article>
+
+        {% endfor %}
+
+         <div class="pagination">
+        <div class="inline-block rounded-md w-6 h-6">
+            {% if page_obj.has_previous %}
+            <a href="?page={{page_obj.previous_page_number}}" class="text-purple-400 btn"><</a>
+            {% else %}
+            <span class="text-gray-400 shadow-inner2 px-2 py-1 rounded-md"><</span>
+            {% endif %}
+        </div>
+
+
+        {% for page in paginator.page_range  %}
+            {% if page == page_obj.number %}
+            <span class="inline-block color-solid text-gray-100 bg-purple-400 rounded-md w-6 h-6 text-center shadow-outline3">{{page}}</span>
+            {% else %}
+            <a href="?page={{page}}" class="inline-block btn color-solid text-gray-100 bg-purple-400 rounded-md w-6 h-6 text-center">{{page}}</a>
+            {% endif %}
+        {% endfor %}
+
+        <div class="inline-block rounded-md w-6 h-6">
+            {% if page_obj.has_next %}
+                <a href="?page={{page_obj.next_page_number}}" class="text-purple-400 btn">></a>
+            {% else %}
+                <span class="text-gray-400 shadow-inner2 px-2 py-1 rounded-md">></span>
+            {% endif %}
+        </div>
+    </div>
+    </section>
+
+
+{% endblock content %}

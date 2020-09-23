@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block page_title %}
+Edit Comment
+{% endblock page_title %}
+
+{% block content %}
+<section class="comment-list">
+    {% for comment in comments %}
+        {% include 'mixins/comment.html' with comment=comment photo=comment.photo profile_shown=True%}
+    {% endfor %}
+</section>
+
+{% include 'mixins/commentForm.html' with ctx="DONE" text_color="green" %}
+
+{% endblock content %}

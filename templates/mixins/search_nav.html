@@ -1,0 +1,4 @@
+<nav class="flex justify-around">
+    <a href="{% url 'photos:search' %}" class="mx-auto mt-10 btn py-2 px-4 {% if 'photos' in request.path %}text-gray-400 shadow-outline2 hover:text-teal-400{% else %}text-teal-400{% endif %}">Post</a>
+    <a href="{% url 'accounts:search' %}" class="mx-auto mt-10 btn py-2 px-4 {% if 'accounts' in request.path %}text-gray-400 shadow-outline2 hover:text-red-400{% else %}text-pink-400{% endif %}">User</a>
+</nav>

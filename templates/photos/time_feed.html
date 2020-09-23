@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    Homepage
+{% endblock page_title %}
+    {% block content %}
+
+<section class="timefeed">
+    {% if not posts %}
+        <p class="nopost">
+            Welcome to Highlihgt! <br> You don't have any <strong>Posts</strong>  or <strong>Followings</strong>.  
+            <br/> Post your very first photo or search <i class="fas fa-search"></i> user you might be interested.
+        </p> 
+    {% endif %}
+
+    {% for post in posts  %}
+        <div class="post mt-12 rounded-md p-4">
+            {% include 'mixins/post.html' with post=post %}
+        </div>
+    {% endfor %}
+</section>
+
+{% endblock content %}

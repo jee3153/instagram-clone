@@ -1,0 +1,35 @@
+<header class="sticky w-full top-0">
+  <div class="flex justify-between items-center bg-gray-200 p-3">
+
+    <a href="{% url 'core:home' %}">
+    <h1 class="dimentional-text text-2xl">Highlight.</h1>
+    </a>
+    <div>
+
+      <span class="mr-4 text-sm">Hello, {% if not request.user.is_authenticated %}you{% else %}{{request.user}}{% endif %}</span>
+
+      {% if not request.user.is_authenticated %}
+        <span>
+            <a class="btn p-2 text-xs mr-2" href="{% url 'accounts:register' %}">
+              <i class="fas fa-user-plus"></i> Register
+            </a>
+          </span>
+
+          <span>
+            <a class="btn p-2 text-xs mr-2" href="{% url 'accounts:login' %}">
+              <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+          </span>
+      {% endif %}
+
+      {% if request.user.is_authenticated %}
+        <span>
+          <a class="btn p-2 text-xs" href="{% url 'accounts:logout' %}">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </a>
+        </span>
+    {% endif %}
+
+    </div>
+  </div>
+</header>

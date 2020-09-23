@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block page_title %}
+    Register
+{% endblock page_title %}
+
+{% block content %}
+<section class="flex justify-center mt-20">
+
+    <div class="box register-container">
+        <h1 class="mb-4">Register account</h1>
+        <span class="profile flex justify-center items-center"><i class="fas fa-expand text-3xl"></i></span>
+        <span class="text-sm py-3">Highlight</span>
+        <form action="" method="POST" class="flex flex-col">
+            {% csrf_token %}
+            {% for field in form  %}
+                {{field}}
+                {{field.erros}}
+            {% endfor %}
+            {% comment %} {{form.username}}
+            {{form.email}}
+            {{form.password1}}
+            {{form.password2}} {% endcomment %}
+            <button name="Register" class="btn color mt-6">Register</button>
+        </form>
+        <span class="mt-5 text-xs text-center">Already have an account?<br/> Click <a class="text-red-600" href="{% url 'accounts:login' %}">here</a> to login</span>
+    </div>
+</section>
+   
+
+{% endblock content %}

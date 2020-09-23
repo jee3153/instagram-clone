@@ -1,0 +1,5 @@
+<form action="" method="POST" class="comment-form">
+{% csrf_token %}
+{{form.comment}}
+<button class="btn px-4 py-2 ml-4 text-{% if text_color == "green" %}teal{% else %}pink{% endif %}-400  font-medium">{{ctx}}</button>
+</form>

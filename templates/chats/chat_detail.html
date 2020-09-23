@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block page_title %}
+    Chat Detail
+{% endblock page_title %}
+{% block content %}
+
+<nav class="chat-title">Direct Message to <strong class="me">{{user}}</strong></nav>
+
+<section class="chat">
+    {% for participant in chat.participants.all  %}
+        {% if participant.pk is user.pk %}
+        {% else %}
+                <aside class="participant">
+                    {% include 'mixins/profile_avatar.html' with user=participant %}
+                    <div class="participant-name">{{participant}}</div>
+                </aside>
+        {% endif %}
+    {% endfor %}
+
+    <div class="direct-messages overflow">
+        <div class="direct-message-wrapper">
+            {% for message in chat.messages.all  %}
+                <article class="direct-message {% if message.user.pk is user.pk %}text-right{% endif %}">
+                    <p class="direct-message-user-name">{{message.user}}</p>
+                    <p class="direct-message-content {% if message.user.pk is user.pk %}my-message{% else %}others-message{% endif %}">
+                        {{message.message}}
+                    </p>
+                </article>
+            {% endfor %}
+        </div>
+
+        <form method='POST' class="sending-messeage">
+            {% csrf_token %}
+            <input type="text" name="message" placeholder="Send a message" class="sending-messeage-input" required />
+            {% comment %} {% for field in form %}
+                {{field}}
+            {% endfor %} {% endcomment %}
+            <button type='submit' class="sending-messeage-btn btn">Send</button>
+        </form>
+    </div>
+</section>
+
+{% endblock content %}

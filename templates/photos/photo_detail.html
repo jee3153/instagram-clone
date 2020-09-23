@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block page_title %}
+    Photo Detail
+{% endblock page_title %}
+{% block content %}
+<section class="flex flex-col items-center justify-center">
+    <div class="detail">
+        {% include 'mixins/post.html' with post=photo %}
+    </div>
+</section>
+
+{% endblock content %}

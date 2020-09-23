@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block page_title %}
+    User Search View
+{% endblock page_title %}
+{% block content %}
+<div class="w-full h-full text-center">
+
+    {% include 'mixins/search_nav.html' %}
+
+
+    <form action="{% url 'accounts:search' %}" method="GET" class="p-4 mb-10 text-center m-4">
+        {% for field in form %}
+            {{field}}
+        {% endfor %}
+        <button class='btn color-solid px-4 py-2 bg-purple-400 ml-2 text-gray-100'>Search</button>
+    </form>
+
+        <h1 class="text-center text-gray-500 text-lg px-4 py-6 shadow-inner2">Results of <span class="bg-gray-400 rounded-md py-1 px-2 text-sm shadow-inner2">@{{keyword}}</span></h1>
+
+ <section class="w-full p-4">
+        {% for user in users.object_list  %}
+             <a href="{% url 'accounts:user' user.pk %}">
+                <article class="search-users justify-around mb-4 w-full px-10 py-2 items-center hover:shadow-outline2">
+                     {% include 'mixins/profile_avatar.html' with user=user %}
+                    <span class="following__name px-3 font-medium">{{user}}</span>
+                    <span class="following__bio text-sm text-gray-500 text-center">{{user.bio|truncatewords:10}}</span>
+                </article>
+            </a>
+        {% endfor %}
+    </section>
+
+
+    <div class="pagination">
+        {% include 'mixins/pagination.html' with data=users search_by=username %}
+    </div>
+    
+
+</div>
+
+{% endblock content %}

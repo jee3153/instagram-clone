@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    {{author}}
+{% endblock page_title %}
+
+{% block content %}
+    <div class="flex w-full">
+
+        <aside class="user-section ml-6 w-5/12 px-3 mr-6">
+            <div class="flex justify-start">
+                {% if request.user == author %}
+                    <a href="{% url 'accounts:setting' request.user.pk %}" class="btn py-0.5 px-1">
+                        <i class="fas fa-cog text-sm"></i>
+                    </a>
+                {% endif %}
+            </div>
+            <div class="flex justify-center">
+                {% include 'mixins/profile_avatar.html' with user=author %}
+            </div>
+            <div class="flex justify-center font-medium text-lg my-16">
+                {{author}}
+            </div>
+
+            <div class="flex justify-around">
+
+                <div class="flex flex-col items-center">
+                    <span>{{author.photo.count}}</span>
+                    <span class="text-gray-500">posts</span>
+                </div>
+
+                <a href="{% url 'follow:followings' author.pk %}">
+                    <div class="flex flex-col items-center">
+                        <span>{{followings_count}}</span>
+                        <span class="text-gray-500">followings</span>
+                    </div>
+                </a>
+
+                <a href="{% url 'follow:followed' author.pk %}">
+                    <div class="flex flex-col items-center">
+                        <span>{{followed_count}}</span>
+                        <span class="text-gray-500">followers</span>
+                    </div>
+                </a>
+
+            </div>
+
+
+            <div class="bio">
+                {{author.bio}}
+            </div>
+
+            {% include 'mixins/following_btn.html' with followings=user.follower.followings.all author=author user=user %}
+            {% if author.pk is not user.pk %}
+                <a href="{% url 'chats:go' host_pk=user.pk guest_pk=author.pk %}" class="btn-message btn color-solid">Message</a>
+            {% endif %}
+        </aside>
+
+        <section class="pb-4 w-full flex flex-col items-center">
+            {% for post in posts  %}
+                <article class="post-item py-2 px-4 my-4">
+                    {% include 'mixins/post.html' with post=post %}
+                </article>
+            {% endfor %}
+        </section>
+
+    </div>
+{% endblock content %}

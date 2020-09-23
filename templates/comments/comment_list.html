@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block page_title %}
+Comment List
+{% endblock page_title %}
+
+{% block content %}
+<section class="comment-list">
+        {% for comment in comments  %}
+                {% include 'mixins/comment.html' with comment=comment photo=comment.photo profile_shown=True%}
+        {% endfor %}
+</section>
+
+{% endblock content %}

@@ -1,0 +1,10 @@
+<nav class="fixed bottom-0 p-4 bg-gray-200 w-full">
+  {% if user.is_authenticated %}
+    <div class="flex justify-between items-center">
+        <a class="btn px-0.6 py-2 text-xs" href=""><i class="fas fa-home"></i></a>
+        <a class="btn px-0.6 py-2 text-xs" href="{% url 'photos:newpost' user.pk %}"><i class="far fa-plus-square"></i></a>
+        <a class="btn px-0.6 py-2 text-xs" href="{% url 'photos:search' %}"><i class="fas fa-search"></i></a>
+        <a class="btn px-0.6 py-2 text-xs" href="{% url 'accounts:user' request.user.pk %}"><i class="fas fa-user"></i></a>
+    </div>
+     {% endif %}
+</nav>

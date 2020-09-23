@@ -1,0 +1,30 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <script src="https://kit.fontawesome.com/6e7ace0859.js" crossorigin="anonymous"></script>
+    <title>
+      {% block page_title %}{% endblock page_title %}
+    </title>
+  </head>
+  <body class="bg-gray-200 text-gray-700 h-full w-screen">
+    {% include 'partials/header.html' %}
+
+    {% include 'partials/messages.html' %}
+    <main class="h-full mt-10">
+      {% block content %}{% endblock content %}
+    </main>
+    {% include 'partials/nav.html' %}
+    <script
+   src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/fileForm.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/resetLink.js' %}"></script>
+  </body>
+</html>

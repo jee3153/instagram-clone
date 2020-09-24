@@ -13,18 +13,21 @@ from django.views.generic import UpdateView, ListView, View, DetailView
 from .forms import PostForm, SearchForm
 
 
-@login_required(login_url="accounts:login")
+# @login_required(login_url="accounts:login")
 def home_view(request):
     user = request.user
+    print(Photo.objects.all())
     try:
         user_id = User.objects.filter(pk=user.id).values_list("id", flat=True)
         followings_ids = FollowRelationship.objects.filter(follower=user).values_list(
             "followings__id", flat=True
         )
-        lookup_user_ids = followings_ids.union(user_id)
-        posts = Photo.objects.prefetch_related("author__followings").filter(
-            author__in=lookup_user_ids
-        )
+        posts = Photo.objects.all()
+        # lookup_user_ids = followings_ids.union(user_id)
+        # posts_by_followers_and_user = Photo.objects.prefetch_related(
+        #     "author__followings"
+        # ).filter(author__in=lookup_user_ids)
+
     except FollowRelationship.DoesNotExist:
         pass
 

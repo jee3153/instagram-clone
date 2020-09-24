@@ -41,7 +41,6 @@ def user_view(request, user):
     try:
         photos = Photo.objects.filter(pk=user)
 
-        print(request.user)
     except Photo.DoesNotExist:
         raise Http404("User does not exist")
     return render(

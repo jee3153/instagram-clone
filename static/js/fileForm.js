@@ -8,6 +8,7 @@ function imageFormHandler() {
   let formData = new FormData(form)
   let display = document.getElementById("profile_display")
   let defaultLabel = document.querySelector(".box__label")
+  // const message = document.querySelector(".uploading")
 
   // Add camera icon in image input
   const SetAttr = () => {
@@ -55,6 +56,7 @@ function imageFormHandler() {
 
   form.addEventListener("submit", function (e) {
     preventDefault(e)
+    const result = document.querySelector(".result")
 
     fetch(window.location.href, {
       method: "POST",
@@ -65,20 +67,23 @@ function imageFormHandler() {
         if (res.status === 200 || res.status === 201) {
           res.json().then((json) => {
             // result shown on a page
-            display.style.backgroundImage = `url(/media/${json.media})`
             defaultLabel.innerHTML = "Choose a file or drag it here."
             defaultLabel.style.left = "calc(50% - 106px)"
-            message.classList.toggle("hidden", false)
-            window.setTimeout(() => {
-              message.classList.add("hidden")
-            }, 3000)
-            // console.log(json)
+
+            result.innerText = json.message
+            result.classList.add("bg-teal-400")
+            result.classList.toggle("hidden")
+
+            window.setTimeout(() => {}, 3000)
+            console.log(json)
           })
-        } else {
-          // console.log(res.statusText)
         }
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        result.innerText = json.message
+        result.classList.add("bg-pink-400")
+        result.classList.toggle("hidden")
+      })
   })
 
   imgInput.onclick = (e) => {}

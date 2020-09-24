@@ -21,11 +21,11 @@
                         <div class="box__imgInput"> 
                             {{form.profile}} 
                             <label class="box__label" for="file">Choose a file or drag it here.</label>
-                        </div> 
-                    <button class="btn color active:outline-none mt-4" id="save">Save</button>
+                        </div>
+                    <button class="save btn color active:outline-none mt-4" id="save">Save</button>
                 </form>
                 <p class="mt-4">Click here to <a href="{% url 'accounts:password_change' %}" class="text-purple-400">Change Password</a></p>
-
+                <p class="result hidden mt-4 shadow-inner2 inline-block rounded-full px-6 py-4 mt-2 text-white"></p>
             </div>
     </section>
 

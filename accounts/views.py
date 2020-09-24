@@ -101,6 +101,7 @@ def setting_view(request, user):
                 form.save()
                 print(request.POST)
                 print(request.FILES)
+                # messages.success(request, "Uploaded Successfully")
                 return JsonResponse(
                     {
                         "error": False,
@@ -109,7 +110,14 @@ def setting_view(request, user):
                     }
                 )
             else:
-                return JsonResponse({"error": True, "errors": form.errors})
+                # messages.error(request, "Something went wrong")
+                return JsonResponse(
+                    {
+                        "error": True,
+                        "errors": form.errors,
+                        "message": "Oops! Something went wrong",
+                    }
+                )
         else:
             context = {"form": form}
             return render(request, "accounts/setting.html", context)

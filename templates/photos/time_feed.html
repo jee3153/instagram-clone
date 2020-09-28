@@ -6,11 +6,14 @@
     {% block content %}
 
 <section class="timefeed">
+{% comment %} testing context {% endcomment %}
+    <p>user id is: {{request.user.pk}}</p>
+    <p>User authentication: {{authentication}}</p>
     {% if not posts %}
         <p class="nopost">
-            Welcome to Highlihgt! <br> You don't have any <strong>Posts</strong>  or <strong>Followings</strong>.  
-            <br/> Post your very first photo or search <i class="fas fa-search"></i> user you might be interested.
-        </p> 
+            Welcome to Highlight!
+            <br/> Post your very first photo or search <i class="fas fa-search"></i> users you might be interested.
+        </p>
     {% endif %}
 
     {% for post in posts  %}

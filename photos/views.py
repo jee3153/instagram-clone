@@ -3,43 +3,53 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sessions.backends.db import SessionStore
 from django.core.exceptions import PermissionDenied
-from django.http import Http404, JsonResponse
+from django.http import Http404, JsonResponse, HttpResponse, HttpRequest
 from django.contrib import messages
 from .models import Photo, Likes
 from accounts.models import User
 from follow.models import FollowRelationship
 from django.views.generic import UpdateView, ListView, View, DetailView
 from .forms import PostForm, SearchForm
+import random
+import string
+
+
+def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+    result = "".join(random.choice(chars) for i in range(size))
+    return result
 
 
 # @login_required(login_url="accounts:login")
 def home_view(request):
-    user = request.user
-    print(Photo.objects.all())
-    try:
-        user_id = User.objects.filter(pk=user.id).values_list("id", flat=True)
-        followings_ids = FollowRelationship.objects.filter(follower=user).values_list(
-            "followings__id", flat=True
-        )
-        posts = Photo.objects.all()
-        # lookup_user_ids = followings_ids.union(user_id)
-        # posts_by_followers_and_user = Photo.objects.prefetch_related(
-        #     "author__followings"
-        # ).filter(author__in=lookup_user_ids)
+    posts = Photo.objects.all()
+    user_id = request.COOKIES["user_id"]
+    # response = render(request, "photos/time_feed.html", context)
+    if user_id is None:
+        try:
+            generated_name = id_generator()
+            user = User(username=f"Guest user{generated_name}")
+            user.set_unusable_password()
+            user.save()
+            request.user = user
+            HttpResponse.set_cookie(key="username", value=user.username)
+            HttpResponse.set_cookie(key="password", value=user.password)
 
-    except FollowRelationship.DoesNotExist:
-        pass
+        except Exception:
+            pass
+    elif user_id is not None:
+        request.user = User.objects.get(pk=user_id)
 
     context = {
         "posts": posts,
-        "followings": followings_ids,
     }
+    response = render(request, "photos/time_feed.html", context)
 
-    return render(request, "photos/time_feed.html", context)
+    return response
 
 
-@login_required(login_url="accounts:login")
+# @login_required(login_url="accounts:login")
 def user_view(request, user):
     try:
         photos = Photo.objects.filter(pk=user)
@@ -64,6 +74,7 @@ def newpost_view(request, user):
             messages.success(request, "Your photo posted.")
             return redirect(reverse("core:home"))
     else:
+        messages.error(request, "Something went wrong.")
         form = PostForm()
     return render(request, "photos/new_photo.html", {"form": form})
 
@@ -91,9 +102,11 @@ def like_photo(request, photo_pk, user_pk):
     photo = Photo.objects.get(pk=photo_pk)
     post_table, created = Likes.objects.get_or_create(photo=photo)
     likers = photo.post.likers
+    # if request.user.pk is None:
+    #     return redirect(reverse("accounts:login"))
     if request.user not in likers.all():
         likers.add(user_pk)
-    return redirect(reverse("core:home"))
+        return redirect(reverse("core:home"))
 
 
 @login_required(login_url="accounts:login")
@@ -155,3 +168,30 @@ class SearchView(LoginRequiredMixin, View):
 
 class PostDetail(DetailView):
     model = Photo
+
+
+# original home_view
+
+# def home_view(request):
+
+#     try:
+#         filtering photos by user's followings
+#         user_id = User.objects.filter(pk=user.id).values_list("id", flat=True)
+#         followings_ids = FollowRelationship.objects.filter(follower=user).values_list(
+#             "followings__id", flat=True
+#         )
+
+#         lookup_user_ids = followings_ids.union(user_id)
+#         posts_by_followers_and_user = Photo.objects.prefetch_related(
+#             "author__followings"
+#         ).filter(author__in=lookup_user_ids)
+
+#     except FollowRelationship.DoesNotExist:
+#         pass
+
+#     context = {
+#         "posts": posts,
+#         "followings": followings_ids,
+#     }
+
+#     return render(request, "photos/time_feed.html", context)

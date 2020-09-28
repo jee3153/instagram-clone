@@ -15,7 +15,7 @@ from .models import User
 from follow.models import FollowRelationship
 
 
-@login_required(login_url="accounts:login")
+# @login_required(login_url="accounts:login")
 def user_view(request, user):
     try:
         # author = User.objects.get(pk=user)
@@ -67,7 +67,7 @@ def register_view(request):
     return render(request, "accounts/register.html", context)
 
 
-@unauthenticated_user
+# @unauthenticated_user
 def login_view(request):
     form = AuthenticationForm()
     if request.method == "POST":
@@ -79,13 +79,18 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            print(user)
+            # print(user)
             return redirect(reverse("core:home"))
         else:
             messages.info(request, "Username OR password is incorrect")
 
     context = {"form": form}
     return render(request, "accounts/login.html", context)
+
+
+def session_login_view(request):
+    print(f"the session: {request.session}")
+    return render(request, "photos/time_feed.html", "")
 
 
 @login_required(login_url="accounts:login")

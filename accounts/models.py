@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, AbstractBaseUser
 from core import managers as core_managers
 
 
@@ -19,9 +19,8 @@ class User(AbstractUser):
         (MALE, "Male"),
         (NOT_SPECIFIED, "Prefer not specified"),
     )
-
     login_method = models.CharField(
-        max_length=30, choices=LOGIN_CHOICES, default=LOGIN_EMAIL
+        max_length=30, choices=LOGIN_CHOICES, default=LOGIN_EMAIL, null=True
     )
     bio = models.TextField(max_length=300, blank=True)
     profile = models.ImageField(upload_to="user_profiles/", null=True, blank=True)

@@ -1,10 +1,19 @@
-<nav class="fixed bottom-0 p-4 bg-gray-200 w-full">
-  {% if user.is_authenticated %}
+<nav class="fixed bottom-0 p-4 bg-teal-400 w-full text-white shadow-inner">
     <div class="flex justify-between items-center">
-        <a class="btn px-0.6 py-2 text-xs" href=""><i class="fas fa-home"></i></a>
-        <a class="btn px-0.6 py-2 text-xs" href="{% url 'photos:newpost' user.pk %}"><i class="far fa-plus-square"></i></a>
-        <a class="btn px-0.6 py-2 text-xs" href="{% url 'photos:search' %}"><i class="fas fa-search"></i></a>
-        <a class="btn px-0.6 py-2 text-xs" href="{% url 'accounts:user' request.user.pk %}"><i class="fas fa-user"></i></a>
+        <a class="btn px-0.6 py-2 text-s bg-pink-400 hover:bg-purple-400" href=""><i class="fas fa-home"></i> Home</a>
+
+        {% if user.is_authenticated %}
+          <a class="btn px-0.6 py-2 bg-pink-400 text-s hover:bg-purple-400" href="{% url 'photos:newpost' user.pk %}"><i class="far fa-plus-square"></i> Post a photo</a>
+        {% else %}
+          <a class="btn px-0.6 py-2 bg-pink-400 text-s hover:bg-purple-400" href="{% url 'accounts:login' %}"><i class="far fa-plus-square"></i> Post a photo</a>
+        {% endif %}
+
+        <a class="btn px-0.6 py-2 bg-pink-400 text-s hover:bg-purple-400" href="{% url 'photos:search' %}"><i class="fas fa-search"></i> Search posts</a>
+        
+        {% if user.is_authenticated %}
+          <a class="btn px-0.6 py-2 bg-pink-400 text-s hover:bg-purple-400" href="{% url 'accounts:user' request.user.pk %}"><i class="fas fa-user"></i> My page</a>
+        {% else %}
+          <a class="btn px-0.6 py-2 bg-pink-400 text-s hover:bg-purple-400" href="{% url 'accounts:login' %}"><i class="fas fa-user"></i> My page</a>
+        {% endif %}
     </div>
-     {% endif %}
 </nav>

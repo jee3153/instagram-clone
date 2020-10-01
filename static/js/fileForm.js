@@ -8,7 +8,6 @@ function imageFormHandler() {
   let formData = new FormData(form)
   let display = document.getElementById("profile_display")
   let defaultLabel = document.querySelector(".box__label")
-  // const message = document.querySelector(".uploading")
 
   // Add camera icon in image input
   const SetAttr = () => {
@@ -139,6 +138,9 @@ function imageFormHandler() {
   SetAttr()
 }
 
+// imageFormHandler()
+// if (window.location.pathname.includes("create")) {
+// }
 for (const node of inputList) {
   if (node.type === "file") {
     imageFormHandler()

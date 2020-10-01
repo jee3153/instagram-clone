@@ -21,29 +21,36 @@ def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return result
 
 
+def guest_user(username):
+    return "Guest user" in username
+
+
 # @login_required(login_url="accounts:login")
 def home_view(request):
     posts = Photo.objects.all()
-    user_id = request.COOKIES["user_id"]
-    # response = render(request, "photos/time_feed.html", context)
-    if user_id is None:
-        try:
-            generated_name = id_generator()
-            user = User(username=f"Guest user{generated_name}")
-            user.set_unusable_password()
-            user.save()
-            request.user = user
-            HttpResponse.set_cookie(key="username", value=user.username)
-            HttpResponse.set_cookie(key="password", value=user.password)
+    # user_id = request.COOKIES["user_id"]
 
-        except Exception:
-            pass
-    elif user_id is not None:
-        request.user = User.objects.get(pk=user_id)
+    # if guest_user(request.user) and user_id is None:
+    #     try:
+    #         generated_name = id_generator()
+    #         user = User(username=f"Guest user{generated_name}")
+    #         user.set_unusable_password()
+    #         user.save()
+    #         request.user = user
+    #         HttpResponse.set_cookie(key="username", value=user.username)
+    #         HttpResponse.set_cookie(key="password", value=user.password)
 
-    context = {
-        "posts": posts,
-    }
+    #     except Exception:
+    #         pass
+    # elif user_id is not None:
+    #     request.user = User.objects.get(pk=user_id)
+
+    # elif request.user.is_authenticated:
+    #     pass
+
+    is_guest_user = guest_user(request.user.username)
+
+    context = {"posts": posts, "is_guest_user": is_guest_user}
     response = render(request, "photos/time_feed.html", context)
 
     return response
@@ -67,6 +74,7 @@ def newpost_view(request, user):
         raise PermissionDenied
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
+        print(request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.core.paginator import Paginator
-from django.http import Http404, JsonResponse
+from django.http import Http404, JsonResponse, HttpResponse, HttpRequest
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.forms import AuthenticationForm
@@ -13,9 +13,12 @@ from .decorators import unauthenticated_user
 from photos.models import Photo
 from .models import User
 from follow.models import FollowRelationship
+from core.views import guest_user
+import random
+import string
 
 
-# @login_required(login_url="accounts:login")
+@login_required(login_url="accounts:login")
 def user_view(request, user):
     try:
         # author = User.objects.get(pk=user)
@@ -56,21 +59,67 @@ def logout_user(request):
 @unauthenticated_user
 def register_view(request):
     form = CreateUserForm()
-    if request.method == "POST":
+    context = {"form": form}
+    response = render(request, "accounts/register.html", context)
+
+    if request.COOKIES.get("username") is not None:
+        response.delete_cookie("username")
+        response.delete_cookie("password")
+
+    elif request.method == "POST":
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
             user = form.cleaned_data.get("username")
             messages.success(request, f"Account was created for {user}.")
             return redirect(reverse("accounts:login"))
-    context = {"form": form}
-    return render(request, "accounts/register.html", context)
+
+    return response
 
 
-# @unauthenticated_user
+def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+    result = "".join(random.choice(chars) for i in range(size))
+    return result
+
+
+@unauthenticated_user
 def login_view(request):
     form = AuthenticationForm()
-    if request.method == "POST":
+    context = {"form": form}
+    response = render(request, "accounts/login.html", context)
+
+    if request.COOKIES.get("username") is None:
+        try:
+            generated_name = id_generator()
+            created_user = User(
+                username=f"Guest user{generated_name}", password=generated_name
+            )
+            created_user.save()
+            request.user = created_user
+            username = request.user.username
+            password = request.user.password
+            response.set_cookie(key="username", value=username)
+            response.set_cookie(key="password", value=password)
+            user = authenticate(request, username=username, password=password)
+            login(request, user)
+            messages.success(request, f"Welcome {user.username}")
+            return redirect(reverse("core:home"))
+        except Exception as e:
+            print(e)
+
+    elif request.COOKIES.get("username") is not None:
+        username = request.COOKIES.get("username")
+        password = request.COOKIES.get("password")
+        user = authenticate(request, username=username, password=password)
+        login(request, user)
+        messages.success(request, f"Welcome {user.username}")
+        return redirect(reverse("core:home"))
+
+    elif request.method == "POST":
+        if request.COOKIES.get("username") is not None:
+            response.delete_cookie("username")
+            response.delete_cookie("password")
+
         form = AuthenticationForm(request.POST)
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -79,18 +128,16 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            # print(user)
             return redirect(reverse("core:home"))
         else:
             messages.info(request, "Username OR password is incorrect")
 
-    context = {"form": form}
-    return render(request, "accounts/login.html", context)
+    return response
 
 
-def session_login_view(request):
-    print(f"the session: {request.session}")
-    return render(request, "photos/time_feed.html", "")
+# def session_login_view(request):
+#     print(f"the session: {request.session}")
+#     return render(request, "photos/time_feed.html", "")
 
 
 @login_required(login_url="accounts:login")
@@ -106,7 +153,6 @@ def setting_view(request, user):
                 form.save()
                 print(request.POST)
                 print(request.FILES)
-                # messages.success(request, "Uploaded Successfully")
                 return JsonResponse(
                     {
                         "error": False,
@@ -115,12 +161,11 @@ def setting_view(request, user):
                     }
                 )
             else:
-                # messages.error(request, "Something went wrong")
                 return JsonResponse(
                     {
                         "error": True,
                         "errors": form.errors,
-                        "message": "Oops! Something went wrong",
+                        "message": "Oops! Something went wrong! You may need to change your username if you are a guest user",
                     }
                 )
         else:

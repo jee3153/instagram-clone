@@ -9,7 +9,7 @@
           {% else %}<span class="text-teal-400 text-2xl">{{request.user}}</span>{% endif %}
        </span>
 
-      {% if not request.user.is_authenticated %}
+      {% if not request.user.is_authenticated or is_guest_user %}
       <span>
         <a class="btn p-2 text-base mr-4" href="{% url 'accounts:register' %}">
           <i class="fas fa-user-plus"></i> Register
@@ -21,7 +21,7 @@
           <i class="fas fa-sign-in-alt"></i> Login
         </a>
       </span>
-      {% endif %} {% if request.user.is_authenticated %}
+      {% endif %} {% if request.user.is_authenticated and not is_guest_user %}
       <span>
         <a class="btn p-2 text-base" href="{% url 'accounts:logout' %}">
           <i class="fas fa-sign-out-alt"></i> Logout

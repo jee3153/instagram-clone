@@ -6,9 +6,6 @@
     {% block content %}
 
 <section class="timefeed">
-{% comment %} testing context {% endcomment %}
-    <p>user id is: {{request.user.pk}}</p>
-    <p>User authentication: {{request.user.is_authenticated}}</p>
     {% if not posts %}
         <p class="nopost">
             Welcome to Highlight!
